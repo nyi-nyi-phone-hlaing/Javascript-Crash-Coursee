@@ -3,11 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css" />
+    <link
+      rel="stylesheet"
+      href="node_modules/@highlightjs/cdn-assets/styles/github-dark.css" />
     <link rel="stylesheet" href="style.css" />
     <title>Learn Javascript Course</title>
   </head>
   <body>
-    <h1>hello world</h1>
+    <div class="wrapper">
+      <h1>hello world</h1>
+      <textarea id="markdown-content" rows="10"></textarea>
+      <div id="html-content"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.0/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script>
+      // Initialize Highlight.js
+      hljs.initHighlightingOnLoad();
+
+      // Select the Markdown and HTML elements
+      const markdownContent = document.querySelector("#markdown-content");
+      const htmlContent = document.querySelector("#html-content");
+
+      // Update HTML content when Markdown input changes
+      markdownContent.addEventListener("input", (e) => {
+        const { value } = e.target;
+        htmlContent.innerHTML = marked(value);
+
+        // Re-highlight code blocks after Markdown rendering
+        htmlContent.querySelectorAll("pre code").forEach((block) => {
+          hljs.highlightElement(block);
+        });
+      });
+
+      // Initial rendering on page load
+      document.addEventListener("DOMContentLoaded", () => {
+        const initializeMarkdown = markdownContent.value;
+        const initializeHtml = marked(initializeMarkdown);
+        htmlContent.innerHTML = initializeHtml;
+
+        // Highlight code blocks initially
+        htmlContent.querySelectorAll("pre code").forEach((block) => {
+          hljs.highlightElement(block);
+        });
+      });
+    </script>
   </body>
-  <script src="app.js"></script>
 </html>
